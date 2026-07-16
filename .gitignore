@@ -26,6 +26,7 @@ coverage/
 # Node / Vite
 node_modules/
 src/ReMarkets.CustomerPortal.Client/dist/
+src/ReMarkets.CustomerPortal.Client/dist-demo/
 src/ReMarkets.CustomerPortal.Client/.vite/
 src/ReMarkets.CustomerPortal.Client/coverage/
 *.log
