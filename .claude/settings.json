@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "permissions": {
+    "allow": [
+      "Bash(dotnet build*)",
+      "Bash(dotnet restore*)",
+      "Bash(dotnet test*)",
+      "Bash(dotnet format*)",
+      "Bash(dotnet list*)",
+      "Bash(dotnet --version)",
+      "Bash(dotnet --info)",
+      "Bash(npm install)",
+      "Bash(npm ci)",
+      "Bash(npm run build)",
+      "Bash(npm run lint)",
+      "Bash(npm run test*)",
+      "Bash(npm run dev)",
+      "Bash(npx prettier --write*)",
+      "Bash(npx eslint*)"
+    ],
+    "deny": [
+      "Edit(appsettings.PRD.json)",
+      "Edit(appsettings.Production.json)",
+      "Edit(src/**/appsettings.PRD.json)",
+      "Edit(src/**/appsettings.Production.json)",
+      "Write(appsettings.PRD.json)",
+      "Write(appsettings.Production.json)",
+      "Write(src/**/appsettings.PRD.json)",
+      "Write(src/**/appsettings.Production.json)"
+    ]
+  },
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash -c 'FILE=$(echo \"$CLAUDE_TOOL_INPUT\" | grep -oE \"\\\"file_path\\\"\\s*:\\s*\\\"[^\\\"]+\\\"\" | sed -E \"s/.*\\\"([^\\\"]+)\\\"$/\\1/\"); case \"$FILE\" in *.cs) (cd \"$CLAUDE_PROJECT_DIR\" && dotnet format --include \"$FILE\" >/dev/null 2>&1) || true ;; esac; exit 0'"
+          },
+          {
+            "type": "command",
+            "command": "bash -c 'FILE=$(echo \"$CLAUDE_TOOL_INPUT\" | grep -oE \"\\\"file_path\\\"\\s*:\\s*\\\"[^\\\"]+\\\"\" | sed -E \"s/.*\\\"([^\\\"]+)\\\"$/\\1/\"); case \"$FILE\" in *ReMarkets.CustomerPortal.Client/*.ts|*ReMarkets.CustomerPortal.Client/*.tsx|*ReMarkets.CustomerPortal.Client/*.js|*ReMarkets.CustomerPortal.Client/*.jsx) (cd \"$CLAUDE_PROJECT_DIR/src/ReMarkets.CustomerPortal.Client\" && npx --no-install prettier --write \"$FILE\" >/dev/null 2>&1) || true ;; esac; exit 0'"
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash -c 'CMD=$(echo \"$CLAUDE_TOOL_INPUT\" | grep -oE \"\\\"command\\\"\\s*:\\s*\\\"[^\\\"]+\\\"\" | sed -E \"s/.*\\\"([^\\\"]+)\\\"$/\\1/\"); case \"$CMD\" in *appsettings.PRD.json*|*appsettings.Production.json*|*\"database update\"*--*[Pp]roduction*) echo \"Blocked: command targets production configuration. Ask the user to confirm and run manually.\" >&2; exit 2 ;; esac; exit 0'"
+          }
+        ]
+      }
+    ]
+  },
+  "enabledPlugins": {
+    "frontend-design@claude-plugins-official": true
+  }
+}

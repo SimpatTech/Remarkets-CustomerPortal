@@ -1,0 +1,45 @@
+# .NET
+bin/
+obj/
+*.user
+*.suo
+.vs/
+*.pdb
+
+# Local runtime config
+appsettings.Local.json
+appsettings.*.Development.json
+secrets.json
+
+# Test results
+TestResults/
+coverage/
+*.trx
+*.coverage
+*.cobertura.xml
+
+# Rider / VS / VS Code
+.idea/
+.vscode/
+*.DotSettings.user
+
+# Node / Vite
+node_modules/
+src/ReMarkets.CustomerPortal.Client/dist/
+src/ReMarkets.CustomerPortal.Client/.vite/
+src/ReMarkets.CustomerPortal.Client/coverage/
+*.log
+.npm/
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Claude / editor scratch
+.claude/settings.local.json
+.claude/worktrees/

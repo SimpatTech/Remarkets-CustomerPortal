@@ -1,0 +1,31 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "client",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "run",
+        "dev",
+        "--prefix",
+        "src/ReMarkets.CustomerPortal.Client"
+      ],
+      "port": 5273
+    },
+    {
+      "name": "client-preview",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "run",
+        "dev",
+        "--prefix",
+        "src/ReMarkets.CustomerPortal.Client",
+        "--",
+        "--port",
+        "5299",
+        "--strictPort"
+      ],
+      "port": 5299
+    }
+  ]
+}
